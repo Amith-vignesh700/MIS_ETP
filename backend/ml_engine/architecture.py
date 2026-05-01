@@ -486,3 +486,130 @@ class CNNLSTMElastography(nn.Module):
             f"Total params: {total:,} | "
             f"Trainable: {trainable:,} ({100 * trainable / total:.1f}%)"
         )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  High-Level Training Orchestrators
+# ══════════════════════════════════════════════════════════════════════════════
+
+class PhysicsInformedLoss(nn.Module):
+    """
+    Combined physics-informed loss for supervised pre-training.
+    L = L_LNCC + λ_tv * L_TV + L_focal
+    """
+
+    def __init__(
+        self,
+        lncc_win:      int         = 9,
+        tv_lambda:     float       = 0.05,
+        focal_gamma:   float       = 2.0,
+        class_weights: list[float] | None = None,
+        n_classes:     int         = 3,
+    ) -> None:
+        super().__init__()
+        self.lncc_loss  = LNCCLoss(win=lncc_win)
+        self.tv_loss    = SpatioTemporalTVLoss()
+        self.focal_loss = FocalLoss(
+            gamma=focal_gamma, class_weights=class_weights, reduction="mean"
+        )
+        self.tv_lambda = tv_lambda
+
+    def forward(
+        self,
+        logits:       torch.Tensor,
+        displacement: torch.Tensor,
+        targets:      torch.Tensor,
+    ) -> tuple[torch.Tensor, dict[str, float]]:
+        l_lncc  = self.lncc_loss(displacement)
+        l_tv    = self.tv_loss(displacement)
+        l_focal = self.focal_loss(logits, targets)
+
+        total = l_lncc + self.tv_lambda * l_tv + l_focal
+        return total, {
+            "lncc":  float(l_lncc.item()),
+            "tv":    float(l_tv.item()),
+            "focal": float(l_focal.item()),
+        }
+
+
+class ADMMOptimizer:
+    """
+    ADMM (Alternating Direction Method of Multipliers) Orchestrator.
+    Used for unsupervised domain adaptation (Phase 2B).
+
+    Splits the problem into:
+        - θ-step: SGD on LNCC + ADMM penalty
+        - z-step: Proximal update for TV (soft-thresholding)
+        - u-step: Dual variable update
+    """
+
+    def __init__(
+        self,
+        model:        nn.Module,
+        lr:           float = 1e-4,
+        momentum:     float = 0.9,
+        weight_decay: float = 1e-4,
+        rho:          float = 0.1,
+        tv_lambda:    float = 0.05,
+        inner_iters:  int   = 3,
+    ) -> None:
+        self.model       = model
+        self.rho         = rho
+        self.tv_lambda   = tv_lambda
+        self.inner_iters = inner_iters
+
+        # Only optimize parameters with requires_grad=True
+        trainable = [p for p in model.parameters() if p.requires_grad]
+        self.sgd = torch.optim.SGD(
+            trainable, lr=lr, momentum=momentum, weight_decay=weight_decay
+        )
+
+        self.z: torch.Tensor | None = None
+        self.u: torch.Tensor | None = None
+
+    def _init_dual(self, d: torch.Tensor) -> None:
+        if self.z is None or self.z.shape != d.shape:
+            self.z = torch.zeros_like(d)
+            self.u = torch.zeros_like(d)
+
+    def step(
+        self,
+        x:         torch.Tensor,
+        targets:   torch.Tensor,
+        criterion: PhysicsInformedLoss,
+    ) -> dict[str, float]:
+        """Performs one full ADMM iteration."""
+        total_loss_val = 0.0
+        metrics_agg: dict[str, float] = {"lncc": 0, "tv": 0, "focal": 0}
+
+        for _ in range(self.inner_iters):
+            self.sgd.zero_grad()
+            logits, displacement = self.model(x)
+            self._init_dual(displacement.detach())
+
+            # Smooth parts (LNCC + Focal)
+            loss_pi, parts = criterion(logits, displacement, targets)
+
+            # ADMM penalty: (ρ/2)‖d - z + u‖²
+            penalty = (self.rho / 2.0) * torch.mean((displacement - self.z + self.u) ** 2)
+            loss = loss_pi + penalty
+
+            loss.backward()
+            self.sgd.step()
+
+            total_loss_val += float(loss.item())
+            for k in metrics_agg:
+                metrics_agg[k] += parts.get(k, 0.0)
+
+        # z-step: Proximal update
+        with torch.no_grad():
+            _, d_final = self.model(x)
+            self.z = soft_threshold(d_final + self.u, self.tv_lambda / self.rho)
+            # u-step: Dual ascent
+            self.u = self.u + d_final - self.z
+
+        n = self.inner_iters
+        return {
+            "total_loss": total_loss_val / n,
+            **{k: v / n for k, v in metrics_agg.items()},
+        }
