@@ -13,15 +13,13 @@ tqdm>=4.65.0
 pillow>=10.0.0
 
 # ── Deep Learning — PyTorch (CPU build; swap for CUDA wheel on GPU servers) ───
-# CPU build (default for Docker / development):
-torch>=2.1.0
-torchvision>=0.16.0
-torchaudio>=2.1.0
-
 # For CUDA 11.8 GPU build, replace the three lines above with:
-# --index-url https://download.pytorch.org/whl/cu118
-# torch>=2.1.0+cu118
-# torchvision>=0.16.0+cu118
+--index-url https://download.pytorch.org/whl/cu118
+torch>=2.1.0+cu118
+torchvision>=0.16.0+cu118
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+tensorboard>=2.14.0
 
 # ── Signal Processing & Linear Algebra ──────────────────────────────────────
 scikit-learn>=1.3.0          # metrics, train_test_split, confusion matrix
