@@ -7,6 +7,9 @@ data/
 *.mat
 *.MAT
 
+# outputs
+out/
+
 # ── Trained Model Weights (too large for git; use git-lfs or cloud storage) ──
 backend/ml_engine/weights/*.pth
 backend/ml_engine/weights/*.pt
