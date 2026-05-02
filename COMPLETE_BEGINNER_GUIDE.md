@@ -220,6 +220,13 @@ ultrasound-elastography-grading/
 │   ├── 03_unsupervised_tuning.ipynb  ← Phase 2B: ADMM fine-tune on phantom data
 │   └── 04_statistical_testing.ipynb  ← Phase 3: Wilcoxon test + CI + MLE
 │
+├── out/
+│   └── processed/                    ← Auto-generated outputs from notebooks
+│       ├── tensors/                  ← Preprocessed .npz arrays and JSON manifests
+│       ├── models/                   ← Saved PyTorch .pth weight files
+│       ├── figures/                  ← Heatmaps, confusion matrices, loss curves (.png)
+│       └── metrics/                  ← Statistical results and training histories (.json)
+│
 ├── backend/
 │   ├── Dockerfile                    ← Builds Python/PyTorch container image
 │   ├── requirements.txt              ← All Python package dependencies
@@ -259,6 +266,13 @@ ultrasound-elastography-grading/
 ---
 
 ### Detailed File Descriptions
+
+#### `out/processed/`
+This directory acts as the central storage for auto-generated outputs from running the pipeline notebooks. It represents the transition from raw data to deployable models.
+- **`tensors/`**: Contains `.npz` files that hold the multi-frame, filtered tensor data resulting from Phase 1 processing (DMD). Also contains metadata files like `manifest.pkl` (lists all successfully processed files) and `test_files.json` (defines the hold-out set used in Phase 3).
+- **`models/`**: Holds the saved `.pth` weight files from PyTorch training. This includes checkpoint files and the final `cnn_lstm_final.pth`, which is subsequently copied to the backend for live clinical inference.
+- **`figures/`**: Contains all visual `.png` outputs generated during training and validation. Includes pre-training curves, LNCC/TV loss trajectories, strain heatmaps, and statistical validation confusion matrices.
+- **`metrics/`**: Contains raw `.json` files representing training histories and statistical test results (Wilcoxon p-values, CI). These provide a granular view of epoch-by-epoch learning and the final clinical validation scores.
 
 #### `backend/core/settings.py`
 The central configuration hub for the Django backend. Key sections:
@@ -1354,6 +1368,35 @@ docker-compose logs -f django
 # Test health endpoint
 curl http://localhost/api/health/
 # Expected: {"status": "ok", "model_loaded": true, "device": "cpu"}
+
+### Step 5: The Development Way (Without Docker)
+
+This is the fastest way to test changes during development without waiting for Docker to build.
+
+**1. Run the Django Backend:**
+Open your first terminal window:
+```bash
+cd backend/
+# (Optional) python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
+```
+
+**2. Run the Frontend:**
+Open a second terminal window:
+```bash
+cd frontend/
+# Use Python's built-in server to serve static files on port 80
+python -m http.server 80
+```
+
+**3. Access the Dashboard:**
+Visit `http://localhost` in your browser. 
+
+> [!NOTE]
+> Since `CORS_ALLOW_ALL_ORIGINS = DEBUG` is set to `True` by default when `DJANGO_DEBUG=True` (or omitted) in your `.env`, the frontend on port 80 can talk to the backend on port 8000 without any security blocks.
+
 
 # Open browser
 open http://localhost

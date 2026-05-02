@@ -87,7 +87,7 @@ def extract_rf_frames(mat_data: dict[str, Any]) -> np.ndarray:
     KeyError : if no recognised RF key is found
     """
     candidate_keys = ["rf_pre", "rf_post", "RF", "rfData", "IQpre", "IQpost",
-                      "rf", "RFdata", "data"]
+                      "rf", "RFdata", "data", "Data"]
 
     for key in candidate_keys:
         if key in mat_data:

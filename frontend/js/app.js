@@ -29,7 +29,7 @@
    ══════════════════════════════════════════════════════════════════════════════ */
 
 const CONFIG = {
-  API_ENDPOINT: '/api/predict/',
+  API_ENDPOINT: 'http://localhost:8000/api/predict/',
   REQUEST_TIMEOUT_MS: 180_000,       // 3 min — DMD + CNN-LSTM can be slow on CPU
   MAX_FILE_SIZE_MB: 200,
   ALLOWED_EXTENSIONS: ['.mat'],

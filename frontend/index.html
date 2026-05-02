@@ -1,889 +1,920 @@
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ultrasound Elastography — Label-Free Tissue Tumor Grading</title>
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%238B2635'/><path d='M7 12h10M9 8l6 8M15 8l-6 8' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultrasound Elastography — Label-Free Tissue Tumor Grading</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%238B2635'/><path d='M7 12h10M9 8l6 8M15 8l-6 8' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>" />
 
-    <!-- Google Fonts: Playfair Display (Serif) & Plus Jakarta Sans (Sans) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Tailwind Custom Config -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              "dr-cream": "#F9F7F2",
-              "dr-dark":  "#2C1810",
-              "dr-brown": "#4A3B32",
-              "dr-accent":"#8B2635",
-              "dr-gold":  "#D4AF37",
+  <!-- Google Fonts: Playfair Display (Serif) & Plus Jakarta Sans (Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind Custom Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "dr-cream": "#F9F7F2",
+            "dr-dark": "#2C1810",
+            "dr-brown": "#4A3B32",
+            "dr-accent": "#8B2635",
+            "dr-gold": "#D4AF37",
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', "serif"],
+            sans: ['"Plus Jakarta Sans"', "sans-serif"],
+            mono: ['"JetBrains Mono"', "monospace"],
+          },
+          animation: {
+            float: "float 6s ease-in-out infinite",
+            shake: "shake 0.5s cubic-bezier(.36,.07,.19,.97) both",
+            "slide-in": "slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+            "fade-out": "fadeOut 0.4s ease-out forwards",
+            "wave": "wave 3s ease-in-out infinite",
+          },
+          keyframes: {
+            float: {
+              "0%, 100%": { transform: "translateY(0)" },
+              "50%": { transform: "translateY(-20px)" },
             },
-            fontFamily: {
-              serif: ['"Playfair Display"', "serif"],
-              sans:  ['"Plus Jakarta Sans"', "sans-serif"],
-              mono:  ['"JetBrains Mono"', "monospace"],
+            shake: {
+              "10%, 90%": { transform: "translate3d(-1px,0,0)" },
+              "20%, 80%": { transform: "translate3d(2px,0,0)" },
+              "30%, 50%, 70%": { transform: "translate3d(-4px,0,0)" },
+              "40%, 60%": { transform: "translate3d(4px,0,0)" },
             },
-            animation: {
-              float:     "float 6s ease-in-out infinite",
-              shake:     "shake 0.5s cubic-bezier(.36,.07,.19,.97) both",
-              "slide-in":"slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-              "fade-out":"fadeOut 0.4s ease-out forwards",
-              "wave":    "wave 3s ease-in-out infinite",
+            slideIn: {
+              "0%": { transform: "translateY(20px)", opacity: "0" },
+              "100%": { transform: "translateY(0)", opacity: "1" },
             },
-            keyframes: {
-              float: {
-                "0%, 100%": { transform: "translateY(0)" },
-                "50%":      { transform: "translateY(-20px)" },
-              },
-              shake: {
-                "10%, 90%":       { transform: "translate3d(-1px,0,0)" },
-                "20%, 80%":       { transform: "translate3d(2px,0,0)" },
-                "30%, 50%, 70%":  { transform: "translate3d(-4px,0,0)" },
-                "40%, 60%":       { transform: "translate3d(4px,0,0)" },
-              },
-              slideIn: {
-                "0%":   { transform: "translateY(20px)", opacity: "0" },
-                "100%": { transform: "translateY(0)",    opacity: "1" },
-              },
-              fadeOut: {
-                "0%":   { opacity: "1", transform: "scale(1)" },
-                "100%": { opacity: "0", transform: "scale(0.95)" },
-              },
-              wave: {
-                "0%, 100%": { transform: "scaleY(1)" },
-                "50%":      { transform: "scaleY(0.4)" },
-              },
+            fadeOut: {
+              "0%": { opacity: "1", transform: "scale(1)" },
+              "100%": { opacity: "0", transform: "scale(0.95)" },
+            },
+            wave: {
+              "0%, 100%": { transform: "scaleY(1)" },
+              "50%": { transform: "scaleY(0.4)" },
             },
           },
         },
-      };
-    </script>
+      },
+    };
+  </script>
 
-    <!-- Custom stylesheet -->
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
 
-  <body class="font-sans antialiased overflow-x-hidden selection:bg-dr-accent selection:text-white relative">
+<body class="font-sans antialiased overflow-x-hidden selection:bg-dr-accent selection:text-white relative">
 
-    <!-- ══════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
          TOAST CONTAINER
     ═══════════════════════════════════════════ -->
-    <div
-      id="toast-container"
-      class="fixed bottom-6 right-6 z-[90] flex flex-col gap-4 pointer-events-none"
-    ></div>
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[90] flex flex-col gap-4 pointer-events-none"></div>
 
-    <!-- ══════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
          MOBILE MENU OVERLAY
     ═══════════════════════════════════════════ -->
-    <div
-      id="mobile-menu"
-      class="fixed inset-0 bg-dr-cream z-[70] transform translate-x-full transition-all duration-500 ease-in-out flex flex-col justify-center items-center opacity-0 pointer-events-none"
-    >
-      <button
-        id="close-menu-btn"
-        class="absolute top-6 right-6 text-dr-dark p-2 hover:text-dr-accent transition-transform duration-300 hover:rotate-90 hover:scale-110 active:scale-95 focus:outline-none"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
+  <div id="mobile-menu"
+    class="fixed inset-0 bg-dr-cream z-[70] transform translate-x-full transition-all duration-500 ease-in-out flex flex-col justify-center items-center opacity-0 pointer-events-none">
+    <button id="close-menu-btn"
+      class="absolute top-6 right-6 text-dr-dark p-2 hover:text-dr-accent transition-transform duration-300 hover:rotate-90 hover:scale-110 active:scale-95 focus:outline-none">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
 
-      <!-- Decorative waveform behind menu text -->
-      <div class="absolute opacity-5 w-full px-6">
-        <svg viewBox="0 0 800 200" class="w-full">
-          <polyline points="0,100 50,40 100,140 150,60 200,120 250,30 300,110 350,70 400,100 450,50 500,130 550,80 600,110 650,45 700,100 750,60 800,100"
-            fill="none" stroke="#8B2635" stroke-width="2"/>
-        </svg>
-      </div>
-
-      <div class="flex flex-col space-y-8 text-center font-serif text-3xl text-dr-dark">
-        <a href="#home"     class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Overview</a>
-        <a href="#diagnose" class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Diagnostic Tool</a>
-        <a href="#care"     class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Care Protocols</a>
-        <a href="#metrics"  class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Metrics</a>
-      </div>
+    <!-- Decorative waveform behind menu text -->
+    <div class="absolute opacity-5 w-full px-6">
+      <svg viewBox="0 0 800 200" class="w-full">
+        <polyline
+          points="0,100 50,40 100,140 150,60 200,120 250,30 300,110 350,70 400,100 450,50 500,130 550,80 600,110 650,45 700,100 750,60 800,100"
+          fill="none" stroke="#8B2635" stroke-width="2" />
+      </svg>
     </div>
 
-    <!-- ══════════════════════════════════════════
+    <div class="flex flex-col space-y-8 text-center font-serif text-3xl text-dr-dark">
+      <a href="#home"
+        class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Overview</a>
+      <a href="#diagnose"
+        class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Diagnostic
+        Tool</a>
+      <a href="#care"
+        class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Care
+        Protocols</a>
+      <a href="#metrics"
+        class="mobile-link hover:text-dr-accent transition-colors transform hover:scale-105 duration-200">Metrics</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
          NAVIGATION
     ═══════════════════════════════════════════ -->
-    <nav id="navbar" class="fixed w-full z-50 top-0 transition-all duration-300 p-6">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div
-          class="font-serif font-bold text-2xl tracking-tighter text-dr-dark cursor-pointer z-50"
-          onclick="window.scrollTo(0,0)"
-        >
-          Elasto<span class="text-dr-accent">Grade.</span>
-        </div>
-
-        <!-- Desktop Links -->
-        <div class="hidden md:flex space-x-8 text-sm font-medium text-dr-brown tracking-wide">
-          <a href="#home"     class="hover:text-dr-accent transition-colors relative group">Overview     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
-          <a href="#diagnose" class="hover:text-dr-accent transition-colors relative group">Diagnostic Tool<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
-          <a href="#care"     class="hover:text-dr-accent transition-colors relative group">Care Protocols <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
-          <a href="#metrics"  class="hover:text-dr-accent transition-colors relative group">Metrics        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <a
-            href="#diagnose"
-            class="hidden md:inline-block px-6 py-2 bg-dr-dark text-white text-xs uppercase tracking-widest font-bold hover:bg-dr-accent transition-colors duration-300 rounded-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-          >
-            Start Analysis
-          </a>
-          <!-- Mobile Menu Button -->
-          <button
-            id="mobile-menu-btn"
-            class="md:hidden text-dr-dark focus:outline-none p-2 hover:text-dr-accent transition-transform duration-200 hover:scale-110 active:scale-95"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
-            </svg>
-          </button>
-        </div>
+  <nav id="navbar" class="fixed w-full z-50 top-0 transition-all duration-300 p-6">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="font-serif font-bold text-2xl tracking-tighter text-dr-dark cursor-pointer z-50"
+        onclick="window.scrollTo(0,0)">
+        Elasto<span class="text-dr-accent">Grade.</span>
       </div>
-    </nav>
 
-    <!-- ══════════════════════════════════════════
+      <!-- Desktop Links -->
+      <div class="hidden md:flex space-x-8 text-sm font-medium text-dr-brown tracking-wide">
+        <a href="#home" class="hover:text-dr-accent transition-colors relative group">Overview <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#diagnose" class="hover:text-dr-accent transition-colors relative group">Diagnostic Tool<span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#care" class="hover:text-dr-accent transition-colors relative group">Care Protocols <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#metrics" class="hover:text-dr-accent transition-colors relative group">Metrics <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-dr-accent transition-all duration-300 group-hover:w-full"></span></a>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <a href="#diagnose"
+          class="hidden md:inline-block px-6 py-2 bg-dr-dark text-white text-xs uppercase tracking-widest font-bold hover:bg-dr-accent transition-colors duration-300 rounded-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+          Start Analysis
+        </a>
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn"
+          class="md:hidden text-dr-dark focus:outline-none p-2 hover:text-dr-accent transition-transform duration-200 hover:scale-110 active:scale-95">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
          SECTION 1 — HERO
     ═══════════════════════════════════════════ -->
-    <section
-      id="home"
-      class="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden"
-    >
-      <!-- Parallax background blobs -->
-      <div class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-gradient-to-l from-[#EBE5D9] to-transparent -z-20 parallax" data-speed="-0.1"></div>
-      <div class="absolute top-20 left-10 w-64 h-64 bg-dr-accent/5 rounded-full blur-3xl -z-10 parallax" data-speed="0.2"></div>
-      <div class="absolute bottom-40 right-20 w-96 h-96 bg-dr-gold/5 rounded-full blur-3xl -z-10 parallax" data-speed="0.15"></div>
+  <section id="home" class="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden">
+    <!-- Parallax background blobs -->
+    <div
+      class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-gradient-to-l from-[#EBE5D9] to-transparent -z-20 parallax"
+      data-speed="-0.1"></div>
+    <div class="absolute top-20 left-10 w-64 h-64 bg-dr-accent/5 rounded-full blur-3xl -z-10 parallax" data-speed="0.2">
+    </div>
+    <div class="absolute bottom-40 right-20 w-96 h-96 bg-dr-gold/5 rounded-full blur-3xl -z-10 parallax"
+      data-speed="0.15"></div>
 
-      <!-- Subtle waveform background texture -->
-      <div class="absolute inset-0 -z-10 opacity-[0.025]">
-        <svg viewBox="0 0 1200 600" class="w-full h-full" preserveAspectRatio="none">
-          <polyline points="0,300 60,180 120,360 180,200 240,340 300,150 360,300 420,220 480,300 540,160 600,300 660,240 720,300 780,130 840,280 900,200 960,300 1020,170 1080,290 1140,210 1200,300"
-            fill="none" stroke="#8B2635" stroke-width="3"/>
-          <polyline points="0,350 60,230 120,400 180,260 240,380 300,200 360,350 420,270 480,350 540,220 600,360 660,290 720,360 780,190 840,330 900,250 960,360 1020,230 1080,340 1140,260 1200,350"
-            fill="none" stroke="#D4AF37" stroke-width="1.5"/>
-        </svg>
-      </div>
+    <!-- Subtle waveform background texture -->
+    <div class="absolute inset-0 -z-10 opacity-[0.025]">
+      <svg viewBox="0 0 1200 600" class="w-full h-full" preserveAspectRatio="none">
+        <polyline
+          points="0,300 60,180 120,360 180,200 240,340 300,150 360,300 420,220 480,300 540,160 600,300 660,240 720,300 780,130 840,280 900,200 960,300 1020,170 1080,290 1140,210 1200,300"
+          fill="none" stroke="#8B2635" stroke-width="3" />
+        <polyline
+          points="0,350 60,230 120,400 180,260 240,380 300,200 360,350 420,270 480,350 540,220 600,360 660,290 720,360 780,190 840,330 900,250 960,360 1020,230 1080,340 1140,260 1200,350"
+          fill="none" stroke="#D4AF37" stroke-width="1.5" />
+      </svg>
+    </div>
 
-      <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-        <!-- Text Content -->
-        <div class="lg:col-span-7 space-y-8 reveal">
-          <div class="inline-flex items-center space-x-2 border-b border-dr-dark pb-1">
-            <span class="text-xs font-bold uppercase tracking-[0.2em] text-dr-accent">Concordia University · IMPACT Lab</span>
-          </div>
-
-          <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] text-dr-dark">
-            Label-Free <br />
-            <span class="italic text-dr-accent relative inline-block">
-              Tumor
-              <svg class="absolute w-full h-3 -bottom-1 left-0 text-dr-gold/30" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="3" fill="none"/>
-              </svg>
-            </span>
-            <br />Grading
-          </h1>
-
-          <p class="text-lg md:text-xl text-dr-brown max-w-lg leading-relaxed font-light">
-            Physics-informed deep learning pipeline for ultrasound elastography.
-            Automatically classifies tissue into <strong class="text-dr-dark font-semibold">Benign, Precancerous, or Malignant</strong>
-            from raw <span class="font-mono text-sm bg-dr-dark/5 px-1 py-0.5 rounded">.mat</span> RF signals —
-            no radiologist labels required.
-          </p>
-
-          <!-- CTA Row -->
-          <div class="flex flex-col sm:flex-row gap-4 pt-4">
-            <a
-              href="#diagnose"
-              class="group relative px-8 py-4 bg-dr-dark text-dr-cream overflow-hidden shadow-xl text-center sm:text-left transition-transform hover:-translate-y-1"
-            >
-              <div class="absolute inset-0 w-0 bg-dr-accent transition-all duration-[250ms] ease-out group-hover:w-full"></div>
-              <span class="relative z-10 font-serif italic text-lg pr-2">Launch Grader</span>
-              <span class="relative z-10 group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
-            <div class="flex items-center justify-center sm:justify-start space-x-3 px-6 py-4 border border-dr-dark/20 backdrop-blur-sm bg-white/30">
-              <div class="flex -space-x-2">
-                <div class="w-8 h-8 rounded-full bg-dr-gold border-2 border-white flex items-center justify-center text-[10px] font-bold text-dr-dark shadow-sm z-30 relative">M</div>
-                <div class="w-8 h-8 rounded-full bg-[#4A141C] border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-sm z-20 relative">N</div>
-                <div class="w-8 h-8 rounded-full bg-[#701E2B] border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-sm z-10 relative">P</div>
-                <div class="w-8 h-8 rounded-full bg-dr-accent border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-sm relative">N</div>
-              </div>
-              <span class="font-serif italic text-dr-accent text-xl">&</span>
-              <span class="text-xs font-medium text-dr-dark uppercase tracking-wide">ENCS ML Research</span>
-            </div>
-          </div>
-
-          <!-- Three-stat strip -->
-          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-dr-dark/10">
-            <div>
-              <p class="font-serif text-3xl text-dr-dark">3-Class</p>
-              <p class="text-xs text-dr-brown uppercase tracking-wider font-semibold mt-0.5">Output</p>
-            </div>
-            <div>
-              <p class="font-serif text-3xl text-dr-dark">CNN-LSTM</p>
-              <p class="text-xs text-dr-brown uppercase tracking-wider font-semibold mt-0.5">Architecture</p>
-            </div>
-            <div>
-              <p class="font-serif text-3xl text-dr-dark">ADMM</p>
-              <p class="text-xs text-dr-brown uppercase tracking-wider font-semibold mt-0.5">Optimizer</p>
-            </div>
-          </div>
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+      <!-- Text Content -->
+      <div class="lg:col-span-7 space-y-8 reveal">
+        <div class="inline-flex items-center space-x-2 border-b border-dr-dark pb-1">
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-dr-accent">TEAM-14</span>
         </div>
 
-        <!-- Hero Visual — Ultrasound / Elastography SVG -->
-        <div class="lg:col-span-5 relative reveal delay-200 mt-10 lg:mt-0 parallax" data-speed="0.05">
-          <div class="relative z-10 aspect-[4/5] bg-dr-dark overflow-hidden shadow-2xl rounded-sm transform transition-transform hover:scale-[1.02] duration-700">
-            <svg viewBox="0 0 400 500" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="tissue-grad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#4A1520" />
-                  <stop offset="100%" stop-color="#1A0A0E" />
-                </radialGradient>
-                <filter id="blur-soft">
-                  <feGaussianBlur stdDeviation="3"/>
-                </filter>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="4" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-
-              <!-- Background -->
-              <rect width="100%" height="100%" fill="#1A0A0E"/>
-
-              <!-- Ultrasound fan/cone simulation -->
-              <path d="M200,40 L40,440 L360,440 Z" fill="url(#tissue-grad)" opacity="0.8"/>
-
-              <!-- Tissue layer echoes — horizontal scan lines -->
-              <line x1="72" y1="160" x2="328" y2="160" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-              <line x1="65" y1="200" x2="335" y2="200" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-              <line x1="58" y1="240" x2="342" y2="240" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-              <line x1="50" y1="280" x2="350" y2="280" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-              <line x1="42" y1="320" x2="358" y2="320" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-              <line x1="34" y1="360" x2="366" y2="360" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-              <line x1="26" y1="400" x2="374" y2="400" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08"/>
-
-              <!-- Speckle noise simulation -->
-              <circle cx="110" cy="185" r="1.2" fill="#F9F7F2" opacity="0.25"/>
-              <circle cx="155" cy="195" r="0.8" fill="#F9F7F2" opacity="0.18"/>
-              <circle cx="230" cy="178" r="1" fill="#F9F7F2" opacity="0.2"/>
-              <circle cx="290" cy="190" r="0.9" fill="#F9F7F2" opacity="0.15"/>
-              <circle cx="140" cy="225" r="1.3" fill="#F9F7F2" opacity="0.3"/>
-              <circle cx="195" cy="215" r="0.7" fill="#F9F7F2" opacity="0.2"/>
-              <circle cx="260" cy="230" r="1.1" fill="#F9F7F2" opacity="0.22"/>
-              <circle cx="310" cy="218" r="0.8" fill="#F9F7F2" opacity="0.16"/>
-              <circle cx="100" cy="265" r="1" fill="#F9F7F2" opacity="0.18"/>
-              <circle cx="165" cy="270" r="1.4" fill="#F9F7F2" opacity="0.28"/>
-              <circle cx="235" cy="258" r="0.7" fill="#F9F7F2" opacity="0.2"/>
-              <circle cx="285" cy="275" r="1.2" fill="#F9F7F2" opacity="0.24"/>
-              <circle cx="330" cy="262" r="0.9" fill="#F9F7F2" opacity="0.17"/>
-              <circle cx="80" y="310" r="1" fill="#F9F7F2" opacity="0.19"/>
-              <circle cx="80" cy="310" r="1" fill="#F9F7F2" opacity="0.19"/>
-              <circle cx="180" cy="295" r="1.3" fill="#F9F7F2" opacity="0.22"/>
-              <circle cx="250" cy="305" r="0.8" fill="#F9F7F2" opacity="0.18"/>
-              <circle cx="320" cy="298" r="1.1" fill="#F9F7F2" opacity="0.2"/>
-
-              <!-- Stiff lesion region (tumor zone) — brighter speckle cluster -->
-              <ellipse cx="210" cy="295" rx="55" ry="42" fill="#8B2635" opacity="0.18" filter="url(#blur-soft)"/>
-              <ellipse cx="210" cy="295" rx="35" ry="28" fill="#D4AF37" opacity="0.08" filter="url(#blur-soft)"/>
-              <!-- Lesion border glow -->
-              <ellipse cx="210" cy="295" rx="55" ry="42" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.25"/>
-              <!-- Lesion speckle (brighter, stiffer) -->
-              <circle cx="190" cy="285" r="1.8" fill="#D4AF37" opacity="0.5"/>
-              <circle cx="215" cy="290" r="2"   fill="#D4AF37" opacity="0.55"/>
-              <circle cx="230" cy="300" r="1.5" fill="#D4AF37" opacity="0.45"/>
-              <circle cx="200" cy="310" r="1.7" fill="#D4AF37" opacity="0.5"/>
-              <circle cx="225" cy="275" r="1.3" fill="#D4AF37" opacity="0.4"/>
-              <circle cx="195" cy="305" r="1.6" fill="#D4AF37" opacity="0.48"/>
-
-              <!-- RF waveform traces (right-side overlay) -->
-              <polyline
-                points="350,160 358,168 362,154 366,172 370,148 374,165 378,155 382,170 386,160"
-                fill="none" stroke="#8B2635" stroke-width="1.2" opacity="0.7"/>
-              <polyline
-                points="350,240 356,252 360,228 364,258 368,224 372,248 376,234 380,255 386,240"
-                fill="none" stroke="#8B2635" stroke-width="1.6" opacity="0.9"/>
-              <polyline
-                points="350,295 354,310 358,280 362,320 368,270 372,315 376,285 380,310 386,295"
-                fill="none" stroke="#D4AF37" stroke-width="2" opacity="1" filter="url(#glow)"/>
-              <polyline
-                points="350,360 356,370 360,348 364,374 368,344 372,368 376,354 380,372 386,360"
-                fill="none" stroke="#8B2635" stroke-width="1.2" opacity="0.65"/>
-
-              <!-- Scan line (animated) — decorative only here -->
-              <line x1="40" y1="295" x2="360" y2="295" stroke="#D4AF37" stroke-width="0.5" opacity="0.4" stroke-dasharray="4 6"/>
-
-              <!-- Depth ruler on left -->
-              <line x1="30" y1="140" x2="30" y2="440" stroke="#F9F7F2" stroke-width="0.5" opacity="0.25"/>
-              <line x1="26" y1="200" x2="34" y2="200" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3"/>
-              <line x1="26" y1="260" x2="34" y2="260" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3"/>
-              <line x1="26" y1="320" x2="34" y2="320" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3"/>
-              <line x1="26" y1="380" x2="34" y2="380" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3"/>
-              <text x="16" y="203" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">1cm</text>
-              <text x="16" y="263" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">2cm</text>
-              <text x="16" y="323" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">3cm</text>
-              <text x="16" y="383" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">4cm</text>
-
-              <!-- Label overlay -->
-              <rect x="145" y="248" width="132" height="18" rx="2" fill="#D4AF37" opacity="0.15"/>
-              <text x="152" y="260" fill="#D4AF37" font-size="8" font-family="monospace" font-weight="600" opacity="0.9">LESION DETECTED · 55×42 px</text>
-
-              <!-- Transducer head at top -->
-              <rect x="160" y="18" width="80" height="20" rx="4" fill="#F9F7F2" opacity="0.15"/>
-              <rect x="168" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7"/>
-              <rect x="180" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7"/>
-              <rect x="192" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7"/>
-              <rect x="204" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7"/>
-              <rect x="216" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7"/>
-              <rect x="228" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7"/>
-
-              <!-- "ELASTO" watermark bottom -->
-              <text x="200" y="470" fill="#F9F7F2" font-size="7" opacity="0.2" text-anchor="middle" font-family="monospace" letter-spacing="6">ELASTOGRAPHY</text>
+        <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-dr-dark">
+          Ultrasound Elastography<br />
+          <span class="italic text-dr-accent relative inline-block">
+            Label-Free Tissue
+            <svg class="absolute w-full h-3 -bottom-1 left-0 text-dr-gold/30" viewBox="0 0 100 10"
+              preserveAspectRatio="none">
+              <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="3" fill="none" />
             </svg>
+          </span>
+          <br />Tumor Grading
+        </h1>
 
-            <!-- Info badge -->
-            <div class="absolute bottom-6 left-6 right-6 p-4 glass-panel border-l-4 border-dr-accent">
-              <p class="font-serif text-lg text-dr-dark">Concordia University</p>
-              <p class="text-xs text-dr-brown uppercase tracking-wider mt-1">IMPACT Lab · Advanced ML Pipeline</p>
+
+        <p class="text-lg md:text-xl text-dr-brown max-w-lg leading-relaxed font-light">
+          Physics-informed deep learning pipeline for ultrasound elastography.
+          Automatically classifies tissue into <strong class="text-dr-dark font-semibold">Benign, Precancerous, or
+            Malignant</strong>
+          from raw <span class="font-mono text-sm bg-dr-dark/5 px-1 py-0.5 rounded">.mat</span> RF signals —
+          no radiologist labels required.
+        </p>
+
+        <!-- CTA Row -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+          <a href="#diagnose"
+            class="group relative px-8 py-4 bg-dr-dark text-dr-cream overflow-hidden shadow-xl text-center sm:text-left transition-transform hover:-translate-y-1">
+            <div class="absolute inset-0 w-0 bg-dr-accent transition-all duration-[250ms] ease-out group-hover:w-full">
             </div>
-          </div>
+            <span class="relative z-10 font-serif italic text-lg pr-2">Launch Grader</span>
+            <span class="relative z-10 group-hover:translate-x-1 transition-transform inline-block">→</span>
+          </a>
+        </div>
 
-          <!-- Decorative ring -->
-          <div class="absolute -bottom-10 -left-10 w-40 h-40 border border-dr-dark/10 rounded-full -z-10 parallax" data-speed="-0.15"></div>
+        <!-- Three-stat strip -->
+        <div class="grid grid-cols-3 gap-4 pt-6 border-t border-dr-dark/10">
+          <div>
+            <p class="font-serif text-3xl text-dr-dark">3-Class</p>
+            <p class="text-xs text-dr-brown uppercase tracking-wider font-semibold mt-0.5">Output</p>
+          </div>
+          <div>
+            <p class="font-serif text-3xl text-dr-dark">CNN-LSTM</p>
+            <p class="text-xs text-dr-brown uppercase tracking-wider font-semibold mt-0.5">Architecture</p>
+          </div>
+          <div>
+            <p class="font-serif text-3xl text-dr-dark">ADMM</p>
+            <p class="text-xs text-dr-brown uppercase tracking-wider font-semibold mt-0.5">Optimizer</p>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- ══════════════════════════════════════════
+      <!-- Hero Visual — Ultrasound / Elastography SVG -->
+      <div class="lg:col-span-5 relative reveal delay-200 mt-10 lg:mt-0 parallax" data-speed="0.05">
+        <div
+          class="relative z-10 aspect-[4/5] bg-dr-dark overflow-hidden shadow-2xl rounded-sm transform transition-transform hover:scale-[1.02] duration-700">
+          <svg viewBox="0 0 400 500" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="tissue-grad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#4A1520" />
+                <stop offset="100%" stop-color="#1A0A0E" />
+              </radialGradient>
+              <filter id="blur-soft">
+                <feGaussianBlur stdDeviation="3" />
+              </filter>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Background -->
+            <rect width="100%" height="100%" fill="#1A0A0E" />
+
+            <!-- Ultrasound fan/cone simulation -->
+            <path d="M200,40 L40,440 L360,440 Z" fill="url(#tissue-grad)" opacity="0.8" />
+
+            <!-- Tissue layer echoes — horizontal scan lines -->
+            <line x1="72" y1="160" x2="328" y2="160" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+            <line x1="65" y1="200" x2="335" y2="200" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+            <line x1="58" y1="240" x2="342" y2="240" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+            <line x1="50" y1="280" x2="350" y2="280" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+            <line x1="42" y1="320" x2="358" y2="320" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+            <line x1="34" y1="360" x2="366" y2="360" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+            <line x1="26" y1="400" x2="374" y2="400" stroke="#F9F7F2" stroke-width="0.3" opacity="0.08" />
+
+            <!-- Speckle noise simulation -->
+            <circle cx="110" cy="185" r="1.2" fill="#F9F7F2" opacity="0.25" />
+            <circle cx="155" cy="195" r="0.8" fill="#F9F7F2" opacity="0.18" />
+            <circle cx="230" cy="178" r="1" fill="#F9F7F2" opacity="0.2" />
+            <circle cx="290" cy="190" r="0.9" fill="#F9F7F2" opacity="0.15" />
+            <circle cx="140" cy="225" r="1.3" fill="#F9F7F2" opacity="0.3" />
+            <circle cx="195" cy="215" r="0.7" fill="#F9F7F2" opacity="0.2" />
+            <circle cx="260" cy="230" r="1.1" fill="#F9F7F2" opacity="0.22" />
+            <circle cx="310" cy="218" r="0.8" fill="#F9F7F2" opacity="0.16" />
+            <circle cx="100" cy="265" r="1" fill="#F9F7F2" opacity="0.18" />
+            <circle cx="165" cy="270" r="1.4" fill="#F9F7F2" opacity="0.28" />
+            <circle cx="235" cy="258" r="0.7" fill="#F9F7F2" opacity="0.2" />
+            <circle cx="285" cy="275" r="1.2" fill="#F9F7F2" opacity="0.24" />
+            <circle cx="330" cy="262" r="0.9" fill="#F9F7F2" opacity="0.17" />
+            <circle cx="80" y="310" r="1" fill="#F9F7F2" opacity="0.19" />
+            <circle cx="80" cy="310" r="1" fill="#F9F7F2" opacity="0.19" />
+            <circle cx="180" cy="295" r="1.3" fill="#F9F7F2" opacity="0.22" />
+            <circle cx="250" cy="305" r="0.8" fill="#F9F7F2" opacity="0.18" />
+            <circle cx="320" cy="298" r="1.1" fill="#F9F7F2" opacity="0.2" />
+
+            <!-- Stiff lesion region (tumor zone) — brighter speckle cluster -->
+            <ellipse cx="210" cy="295" rx="55" ry="42" fill="#8B2635" opacity="0.18" filter="url(#blur-soft)" />
+            <ellipse cx="210" cy="295" rx="35" ry="28" fill="#D4AF37" opacity="0.08" filter="url(#blur-soft)" />
+            <!-- Lesion border glow -->
+            <ellipse cx="210" cy="295" rx="55" ry="42" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.25" />
+            <!-- Lesion speckle (brighter, stiffer) -->
+            <circle cx="190" cy="285" r="1.8" fill="#D4AF37" opacity="0.5" />
+            <circle cx="215" cy="290" r="2" fill="#D4AF37" opacity="0.55" />
+            <circle cx="230" cy="300" r="1.5" fill="#D4AF37" opacity="0.45" />
+            <circle cx="200" cy="310" r="1.7" fill="#D4AF37" opacity="0.5" />
+            <circle cx="225" cy="275" r="1.3" fill="#D4AF37" opacity="0.4" />
+            <circle cx="195" cy="305" r="1.6" fill="#D4AF37" opacity="0.48" />
+
+            <!-- RF waveform traces (right-side overlay) -->
+            <polyline points="350,160 358,168 362,154 366,172 370,148 374,165 378,155 382,170 386,160" fill="none"
+              stroke="#8B2635" stroke-width="1.2" opacity="0.7" />
+            <polyline points="350,240 356,252 360,228 364,258 368,224 372,248 376,234 380,255 386,240" fill="none"
+              stroke="#8B2635" stroke-width="1.6" opacity="0.9" />
+            <polyline points="350,295 354,310 358,280 362,320 368,270 372,315 376,285 380,310 386,295" fill="none"
+              stroke="#D4AF37" stroke-width="2" opacity="1" filter="url(#glow)" />
+            <polyline points="350,360 356,370 360,348 364,374 368,344 372,368 376,354 380,372 386,360" fill="none"
+              stroke="#8B2635" stroke-width="1.2" opacity="0.65" />
+
+            <!-- Scan line (animated) — decorative only here -->
+            <line x1="40" y1="295" x2="360" y2="295" stroke="#D4AF37" stroke-width="0.5" opacity="0.4"
+              stroke-dasharray="4 6" />
+
+            <!-- Depth ruler on left -->
+            <line x1="30" y1="140" x2="30" y2="440" stroke="#F9F7F2" stroke-width="0.5" opacity="0.25" />
+            <line x1="26" y1="200" x2="34" y2="200" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3" />
+            <line x1="26" y1="260" x2="34" y2="260" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3" />
+            <line x1="26" y1="320" x2="34" y2="320" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3" />
+            <line x1="26" y1="380" x2="34" y2="380" stroke="#F9F7F2" stroke-width="0.5" opacity="0.3" />
+            <text x="16" y="203" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">1cm</text>
+            <text x="16" y="263" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">2cm</text>
+            <text x="16" y="323" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">3cm</text>
+            <text x="16" y="383" fill="#F9F7F2" font-size="7" opacity="0.35" font-family="monospace">4cm</text>
+
+            <!-- Label overlay -->
+            <rect x="145" y="248" width="132" height="18" rx="2" fill="#D4AF37" opacity="0.15" />
+            <text x="152" y="260" fill="#D4AF37" font-size="8" font-family="monospace" font-weight="600"
+              opacity="0.9">LESION DETECTED · 55×42 px</text>
+
+            <!-- Transducer head at top -->
+            <rect x="160" y="18" width="80" height="20" rx="4" fill="#F9F7F2" opacity="0.15" />
+            <rect x="168" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7" />
+            <rect x="180" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7" />
+            <rect x="192" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7" />
+            <rect x="204" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7" />
+            <rect x="216" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7" />
+            <rect x="228" y="22" width="8" height="12" rx="1" fill="#8B2635" opacity="0.7" />
+
+            <!-- "ELASTO" watermark bottom -->
+            <text x="200" y="470" fill="#F9F7F2" font-size="7" opacity="0.2" text-anchor="middle"
+              font-family="monospace" letter-spacing="6">ELASTOGRAPHY</text>
+          </svg>
+
+          <!-- Info badge -->
+          <div class="absolute bottom-6 left-6 right-6 p-4 glass-panel border-l-4 border-dr-accent">
+            <p class="font-serif text-base text-dr-dark">MATHEMATICS FOR INTELLIGENT SYSTEMS-IV</p>
+            <p class="text-xs text-dr-brown uppercase tracking-wider mt-1">End Semester Project</p>
+          </div>
+        </div>
+
+        <!-- Decorative ring -->
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 border border-dr-dark/10 rounded-full -z-10 parallax"
+          data-speed="-0.15"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
          SECTION 2 — DIAGNOSTIC TOOL
     ═══════════════════════════════════════════ -->
-    <section id="diagnose" class="py-24 bg-white relative overflow-hidden">
-      <!-- Subtle diagonal decoration -->
-      <div class="absolute top-1/2 left-0 w-full h-1 bg-dr-dark/5 -rotate-3 parallax" data-speed="0.05"></div>
+  <section id="diagnose" class="py-24 bg-white relative overflow-hidden">
+    <!-- Subtle diagonal decoration -->
+    <div class="absolute top-1/2 left-0 w-full h-1 bg-dr-dark/5 -rotate-3 parallax" data-speed="0.05"></div>
 
-      <div class="max-w-5xl mx-auto px-6 relative z-10">
-        <div class="text-center mb-16 reveal">
-          <h2 class="font-serif text-4xl md:text-5xl text-dr-dark mb-4">RF Signal Analysis</h2>
-          <div class="w-16 h-1 bg-dr-accent mx-auto mb-6"></div>
-          <p class="text-dr-brown max-w-xl mx-auto text-lg font-light">
-            Upload a MATLAB <span class="font-mono text-sm bg-dr-dark/8 px-1 py-0.5 rounded">.mat</span> file
-            containing pre- and post-compression RF ultrasound frames. The pipeline runs DMD signal
-            cleaning, CNN-LSTM inference, and returns a 3-class probability with a strain heatmap.
-          </p>
-        </div>
+    <div class="max-w-5xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-serif text-4xl md:text-5xl text-dr-dark mb-4">RF Signal Analysis</h2>
+        <div class="w-16 h-1 bg-dr-accent mx-auto mb-6"></div>
+        <p class="text-dr-brown max-w-xl mx-auto text-lg font-light">
+          Upload a MATLAB <span class="font-mono text-sm bg-dr-dark/8 px-1 py-0.5 rounded">.mat</span> file
+          containing pre- and post-compression RF ultrasound frames. The pipeline runs DMD signal
+          cleaning, CNN-LSTM inference, and returns a 3-class probability with a strain heatmap.
+        </p>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
-          <!-- ── Left: Upload Zone ── -->
-          <div
-            class="glass-panel p-8 shadow-2xl reveal delay-100 transition-all duration-300 relative z-10 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
-            id="upload-container"
-          >
-            <div
-              id="drop-zone"
-              tabindex="0"
-              role="button"
-              aria-label="Upload .mat file"
-              class="border-2 border-dashed border-dr-dark/20 bg-gray-50/50 rounded-sm h-80 flex flex-col justify-center items-center cursor-pointer hover:bg-dr-cream hover:border-dr-accent transition-all duration-300 relative overflow-hidden group focus:outline-none focus:border-dr-accent"
-            >
-              <!-- Hidden file input — ONLY .mat files accepted -->
-              <input type="file" id="file-input" class="hidden" accept=".mat" />
+        <!-- ── Left: Upload Zone ── -->
+        <div
+          class="glass-panel p-8 shadow-2xl reveal delay-100 transition-all duration-300 relative z-10 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
+          id="upload-container">
+          <div id="drop-zone" tabindex="0" role="button" aria-label="Upload .mat file"
+            class="border-2 border-dashed border-dr-dark/20 bg-gray-50/50 rounded-sm h-80 flex flex-col justify-center items-center cursor-pointer hover:bg-dr-cream hover:border-dr-accent transition-all duration-300 relative overflow-hidden group focus:outline-none focus:border-dr-accent">
+            <!-- Hidden file input — ONLY .mat files accepted -->
+            <input type="file" id="file-input" class="hidden" accept=".mat" />
 
-              <!-- Default upload UI -->
-              <div id="upload-ui" class="text-center transition-all duration-300 transform group-hover:-translate-y-1">
-                <!-- Waveform icon -->
-                <svg class="w-14 h-14 mx-auto mb-4 text-dr-brown group-hover:text-dr-accent transition-colors duration-300" viewBox="0 0 56 40" fill="none">
-                  <rect x="0" y="19" width="4" height="4" rx="1"  fill="currentColor" opacity="0.4"/>
-                  <rect x="6" y="14" width="4" height="14" rx="1" fill="currentColor" opacity="0.5"/>
-                  <rect x="12" y="8"  width="4" height="26" rx="1" fill="currentColor" opacity="0.6"/>
-                  <rect x="18" y="14" width="4" height="14" rx="1" fill="currentColor" opacity="0.7"/>
-                  <rect x="24" y="2"  width="4" height="38" rx="1" fill="currentColor" opacity="0.9"/>
-                  <rect x="30" y="10" width="4" height="22" rx="1" fill="currentColor" opacity="0.8"/>
-                  <rect x="36" y="16" width="4" height="10" rx="1" fill="currentColor" opacity="0.7"/>
-                  <rect x="42" y="12" width="4" height="18" rx="1" fill="currentColor" opacity="0.6"/>
-                  <rect x="48" y="18" width="4" height="6"  rx="1" fill="currentColor" opacity="0.4"/>
-                  <rect x="54" y="20" width="2" height="2"  rx="1" fill="currentColor" opacity="0.3"/>
-                </svg>
-                <p class="font-serif text-xl text-dr-dark mb-1">Upload RF Signal File</p>
-                <p class="text-xs text-dr-brown uppercase tracking-widest font-semibold mb-2">Drag & Drop or Click</p>
-                <p class="text-xs text-dr-brown/60 font-mono">Accepts: .mat (MATLAB v5 / v7.3 HDF5) · Max 200 MB</p>
-              </div>
+            <!-- Default upload UI -->
+            <div id="upload-ui" class="text-center transition-all duration-300 transform group-hover:-translate-y-1">
+              <!-- Waveform icon -->
+              <svg
+                class="w-14 h-14 mx-auto mb-4 text-dr-brown group-hover:text-dr-accent transition-colors duration-300"
+                viewBox="0 0 56 40" fill="none">
+                <rect x="0" y="19" width="4" height="4" rx="1" fill="currentColor" opacity="0.4" />
+                <rect x="6" y="14" width="4" height="14" rx="1" fill="currentColor" opacity="0.5" />
+                <rect x="12" y="8" width="4" height="26" rx="1" fill="currentColor" opacity="0.6" />
+                <rect x="18" y="14" width="4" height="14" rx="1" fill="currentColor" opacity="0.7" />
+                <rect x="24" y="2" width="4" height="38" rx="1" fill="currentColor" opacity="0.9" />
+                <rect x="30" y="10" width="4" height="22" rx="1" fill="currentColor" opacity="0.8" />
+                <rect x="36" y="16" width="4" height="10" rx="1" fill="currentColor" opacity="0.7" />
+                <rect x="42" y="12" width="4" height="18" rx="1" fill="currentColor" opacity="0.6" />
+                <rect x="48" y="18" width="4" height="6" rx="1" fill="currentColor" opacity="0.4" />
+                <rect x="54" y="20" width="2" height="2" rx="1" fill="currentColor" opacity="0.3" />
+              </svg>
+              <p class="font-serif text-xl text-dr-dark mb-1">Upload RF Signal File</p>
+              <p class="text-xs text-dr-brown uppercase tracking-widest font-semibold mb-2">Drag & Drop or Click</p>
+              <p class="text-xs text-dr-brown/60 font-mono">Accepts: .mat (MATLAB v5 / v7.3 HDF5) · Max 200 MB</p>
+            </div>
 
-              <!-- File info card — shown after file selected -->
-              <div id="file-info-card">
-                <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <!-- File info card — shown after file selected -->
+            <div id="file-info-card">
+              <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <p class="file-name" id="file-name-display">filename.mat</p>
+              <p class="file-meta" id="file-size-display">0 KB · .mat format</p>
+              <div class="file-status">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p class="file-name" id="file-name-display">filename.mat</p>
-                <p class="file-meta" id="file-size-display">0 KB · .mat format</p>
-                <div class="file-status">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  <span>Ready for analysis</span>
-                </div>
-              </div>
-
-              <!-- Animated scan line (shown briefly on submit) -->
-              <div id="scan-line" class="scan-line"></div>
-
-              <!-- Loading overlay (full processing state) -->
-              <div
-                id="loading-overlay"
-                class="absolute inset-0 bg-dr-dark/95 flex-col items-center justify-center hidden z-30"
-              >
-                <div class="spinner mb-5"></div>
-                <p id="loading-status" class="text-white font-serif text-lg tracking-wide animate-pulse-text">
-                  Loading .mat RF Signal…
-                </p>
-                <p id="loading-substatus" class="text-white/50 text-xs mt-2 font-mono">
-                  scipy.io / h5py parsing
-                </p>
+                <span>Ready for analysis</span>
               </div>
             </div>
 
-            <!-- Scan / Submit Button -->
-            <button
-              id="scan-btn"
-              class="w-full mt-6 py-4 bg-dr-dark text-white font-bold uppercase tracking-widest hover:bg-dr-accent transition-colors shadow-lg active:scale-[0.98] duration-150"
-            >
-              Initialize Grading
+            <!-- Animated scan line (shown briefly on submit) -->
+            <div id="scan-line" class="scan-line"></div>
+
+            <!-- Loading overlay (full processing state) -->
+            <div id="loading-overlay"
+              class="absolute inset-0 bg-dr-dark/95 flex-col items-center justify-center hidden z-30">
+              <div class="spinner mb-5"></div>
+              <p id="loading-status" class="text-white font-serif text-lg tracking-wide animate-pulse-text">
+                Loading .mat RF Signal…
+              </p>
+              <p id="loading-substatus" class="text-white/50 text-xs mt-2 font-mono">
+                scipy.io / h5py parsing
+              </p>
+            </div>
+          </div>
+
+          <!-- Scan / Submit Button -->
+          <button id="scan-btn"
+            class="w-full mt-6 py-4 bg-dr-dark text-white font-bold uppercase tracking-widest hover:bg-dr-accent transition-colors shadow-lg active:scale-[0.98] duration-150">
+            Initialize Grading
+          </button>
+
+          <!-- Pipeline step legend -->
+          <div class="mt-5 grid grid-cols-3 gap-2 text-center">
+            <div class="p-2 bg-dr-cream/60 rounded-sm">
+              <p class="text-xs font-mono text-dr-accent font-semibold">01</p>
+              <p class="text-[10px] text-dr-brown uppercase tracking-wide mt-0.5">DFT + DMD</p>
+            </div>
+            <div class="p-2 bg-dr-cream/60 rounded-sm">
+              <p class="text-xs font-mono text-dr-accent font-semibold">02</p>
+              <p class="text-[10px] text-dr-brown uppercase tracking-wide mt-0.5">CNN-LSTM</p>
+            </div>
+            <div class="p-2 bg-dr-cream/60 rounded-sm">
+              <p class="text-xs font-mono text-dr-accent font-semibold">03</p>
+              <p class="text-[10px] text-dr-brown uppercase tracking-wide mt-0.5">Heatmap</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Right: Results Panel ── -->
+        <div id="result-panel"
+          class="opacity-30 blur-[4px] pointer-events-none transition-all duration-1000 reveal delay-200 select-none">
+          <!-- Result header -->
+          <div class="border-l-4 border-dr-dark pl-6 py-2 mb-8 bg-dr-cream/30">
+            <p class="text-xs font-bold text-dr-brown uppercase tracking-widest mb-1">Analysis Report</p>
+            <h3 class="font-serif text-3xl text-dr-dark">Diagnostic Results</h3>
+          </div>
+
+          <div class="space-y-6">
+
+            <!-- Primary Diagnosis Card -->
+            <div class="bg-dr-cream p-6 border border-dr-dark/5 shadow-sm transform transition-all hover:scale-[1.01]">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-sm font-semibold text-dr-dark tracking-wide">Primary Diagnosis</span>
+                <span id="grade-badge"
+                  class="px-3 py-1 bg-gray-200 text-xs font-bold uppercase tracking-wide text-gray-500 rounded-sm">Pending</span>
+              </div>
+              <p id="grade-text" class="font-serif text-3xl text-dr-dark leading-none mb-4">—</p>
+
+              <!-- 3-Class Confidence Bars -->
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-semibold text-blue-700 uppercase tracking-wide flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> Benign
+                    </span>
+                    <span id="pct-benign" class="confidence-pct text-xs text-dr-brown">0%</span>
+                  </div>
+                  <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div id="bar-benign" class="confidence-bar bar-benign"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <span
+                      class="text-xs font-semibold text-yellow-700 uppercase tracking-wide flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span> Precancerous
+                    </span>
+                    <span id="pct-precancerous" class="confidence-pct text-xs text-dr-brown">0%</span>
+                  </div>
+                  <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div id="bar-precancerous" class="confidence-bar bar-precancerous"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <span
+                      class="text-xs font-semibold text-dr-accent uppercase tracking-wide flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-dr-accent inline-block"></span> Malignant
+                    </span>
+                    <span id="pct-malignant" class="confidence-pct text-xs text-dr-brown">0%</span>
+                  </div>
+                  <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div id="bar-malignant" class="confidence-bar bar-malignant"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Technical Stats Grid -->
+            <div class="grid grid-cols-3 gap-3">
+              <div class="stat-box bg-dr-cream p-4 border border-dr-dark/5 text-center shadow-sm">
+                <p class="text-[10px] text-dr-brown uppercase font-semibold tracking-wide">Inference</p>
+                <p id="process-time" class="font-serif text-2xl text-dr-dark mt-1">—</p>
+              </div>
+              <div class="stat-box bg-dr-cream p-4 border border-dr-dark/5 text-center shadow-sm">
+                <p class="text-[10px] text-dr-brown uppercase font-semibold tracking-wide">DMD Rank</p>
+                <p id="dmd-rank" class="font-serif text-2xl text-dr-dark mt-1">—</p>
+              </div>
+              <div class="stat-box bg-dr-cream p-4 border border-dr-dark/5 text-center shadow-sm">
+                <p class="text-[10px] text-dr-brown uppercase font-semibold tracking-wide">RF Shape</p>
+                <p id="rf-shape" class="font-mono text-xs text-dr-dark mt-1 leading-tight pt-2">—</p>
+              </div>
+            </div>
+
+            <!-- Strain Heatmap -->
+            <div id="heatmap-container" class="rounded-sm">
+              <span class="heatmap-label">STRAIN MAP · ELASTICITY</span>
+              <img id="strain-heatmap" src="" alt="Strain Elasticity Heatmap" />
+            </div>
+
+            <!-- Heatmap download button (only visible once heatmap is loaded) -->
+            <button id="heatmap-download-btn"
+              class="w-full py-2 text-xs uppercase tracking-widest font-bold text-dr-brown border border-dr-dark/10 hover:bg-dr-dark hover:text-white transition-colors hidden">
+              ↓ Download Strain Heatmap
             </button>
 
-            <!-- Pipeline step legend -->
-            <div class="mt-5 grid grid-cols-3 gap-2 text-center">
-              <div class="p-2 bg-dr-cream/60 rounded-sm">
-                <p class="text-xs font-mono text-dr-accent font-semibold">01</p>
-                <p class="text-[10px] text-dr-brown uppercase tracking-wide mt-0.5">DFT + DMD</p>
-              </div>
-              <div class="p-2 bg-dr-cream/60 rounded-sm">
-                <p class="text-xs font-mono text-dr-accent font-semibold">02</p>
-                <p class="text-[10px] text-dr-brown uppercase tracking-wide mt-0.5">CNN-LSTM</p>
-              </div>
-              <div class="p-2 bg-dr-cream/60 rounded-sm">
-                <p class="text-xs font-mono text-dr-accent font-semibold">03</p>
-                <p class="text-[10px] text-dr-brown uppercase tracking-wide mt-0.5">Heatmap</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── Right: Results Panel ── -->
-          <div
-            id="result-panel"
-            class="opacity-30 blur-[4px] pointer-events-none transition-all duration-1000 reveal delay-200 select-none"
-          >
-            <!-- Result header -->
-            <div class="border-l-4 border-dr-dark pl-6 py-2 mb-8 bg-dr-cream/30">
-              <p class="text-xs font-bold text-dr-brown uppercase tracking-widest mb-1">Analysis Report</p>
-              <h3 class="font-serif text-3xl text-dr-dark">Diagnostic Results</h3>
+            <!-- Clinical Recommendation Box -->
+            <div id="recommendation-box"
+              class="p-5 bg-dr-dark text-dr-cream text-sm leading-relaxed border-l-4 border-dr-gold shadow-md">
+              <p class="opacity-80">
+                Upload and scan a <span class="font-mono">.mat</span> file to receive a detailed analysis
+                and clinical protocol recommendation.
+              </p>
             </div>
 
-            <div class="space-y-6">
-
-              <!-- Primary Diagnosis Card -->
-              <div class="bg-dr-cream p-6 border border-dr-dark/5 shadow-sm transform transition-all hover:scale-[1.01]">
-                <div class="flex justify-between items-center mb-3">
-                  <span class="text-sm font-semibold text-dr-dark tracking-wide">Primary Diagnosis</span>
-                  <span
-                    id="grade-badge"
-                    class="px-3 py-1 bg-gray-200 text-xs font-bold uppercase tracking-wide text-gray-500 rounded-sm"
-                  >Pending</span>
-                </div>
-                <p id="grade-text" class="font-serif text-3xl text-dr-dark leading-none mb-4">—</p>
-
-                <!-- 3-Class Confidence Bars -->
-                <div class="space-y-3">
-                  <div>
-                    <div class="flex justify-between items-center mb-1">
-                      <span class="text-xs font-semibold text-blue-700 uppercase tracking-wide flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> Benign
-                      </span>
-                      <span id="pct-benign" class="confidence-pct text-xs text-dr-brown">0%</span>
-                    </div>
-                    <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                      <div id="bar-benign" class="confidence-bar bar-benign"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="flex justify-between items-center mb-1">
-                      <span class="text-xs font-semibold text-yellow-700 uppercase tracking-wide flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span> Precancerous
-                      </span>
-                      <span id="pct-precancerous" class="confidence-pct text-xs text-dr-brown">0%</span>
-                    </div>
-                    <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                      <div id="bar-precancerous" class="confidence-bar bar-precancerous"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="flex justify-between items-center mb-1">
-                      <span class="text-xs font-semibold text-dr-accent uppercase tracking-wide flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-dr-accent inline-block"></span> Malignant
-                      </span>
-                      <span id="pct-malignant" class="confidence-pct text-xs text-dr-brown">0%</span>
-                    </div>
-                    <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                      <div id="bar-malignant" class="confidence-bar bar-malignant"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Technical Stats Grid -->
-              <div class="grid grid-cols-3 gap-3">
-                <div class="stat-box bg-dr-cream p-4 border border-dr-dark/5 text-center shadow-sm">
-                  <p class="text-[10px] text-dr-brown uppercase font-semibold tracking-wide">Inference</p>
-                  <p id="process-time" class="font-serif text-2xl text-dr-dark mt-1">—</p>
-                </div>
-                <div class="stat-box bg-dr-cream p-4 border border-dr-dark/5 text-center shadow-sm">
-                  <p class="text-[10px] text-dr-brown uppercase font-semibold tracking-wide">DMD Rank</p>
-                  <p id="dmd-rank" class="font-serif text-2xl text-dr-dark mt-1">—</p>
-                </div>
-                <div class="stat-box bg-dr-cream p-4 border border-dr-dark/5 text-center shadow-sm">
-                  <p class="text-[10px] text-dr-brown uppercase font-semibold tracking-wide">RF Shape</p>
-                  <p id="rf-shape" class="font-mono text-xs text-dr-dark mt-1 leading-tight pt-2">—</p>
-                </div>
-              </div>
-
-              <!-- Strain Heatmap -->
-              <div
-                id="heatmap-container"
-                class="rounded-sm"
-              >
-                <span class="heatmap-label">STRAIN MAP · ELASTICITY</span>
-                <img id="strain-heatmap" src="" alt="Strain Elasticity Heatmap" />
-              </div>
-
-              <!-- Heatmap download button (only visible once heatmap is loaded) -->
-              <button
-                id="heatmap-download-btn"
-                class="w-full py-2 text-xs uppercase tracking-widest font-bold text-dr-brown border border-dr-dark/10 hover:bg-dr-dark hover:text-white transition-colors hidden"
-              >
-                ↓ Download Strain Heatmap
-              </button>
-
-              <!-- Clinical Recommendation Box -->
-              <div
-                id="recommendation-box"
-                class="p-5 bg-dr-dark text-dr-cream text-sm leading-relaxed border-l-4 border-dr-gold shadow-md"
-              >
-                <p class="opacity-80">
-                  Upload and scan a <span class="font-mono">.mat</span> file to receive a detailed analysis
-                  and clinical protocol recommendation.
-                </p>
-              </div>
-
-            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ══════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
          SECTION 3 — CLINICAL CARE PROTOCOLS
     ═══════════════════════════════════════════ -->
-    <section id="care" class="py-24 bg-dr-cream border-t border-dr-dark/5 relative overflow-hidden">
-      <!-- Floating decor -->
-      <div class="absolute -top-10 -right-10 w-60 h-60 border-2 border-dr-accent/10 rounded-full parallax" data-speed="0.1"></div>
-      <div class="absolute bottom-20 left-10 w-20 h-20 bg-dr-dark/5 rounded-full parallax" data-speed="-0.1"></div>
+  <section id="care" class="py-24 bg-dr-cream border-t border-dr-dark/5 relative overflow-hidden">
+    <!-- Floating decor -->
+    <div class="absolute -top-10 -right-10 w-60 h-60 border-2 border-dr-accent/10 rounded-full parallax"
+      data-speed="0.1"></div>
+    <div class="absolute bottom-20 left-10 w-20 h-20 bg-dr-dark/5 rounded-full parallax" data-speed="-0.1"></div>
 
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
-          <div class="max-w-2xl">
-            <h2 class="font-serif text-4xl md:text-5xl text-dr-dark mb-4">Diagnosis-Based Protocols</h2>
-            <div class="w-16 h-1 bg-dr-accent mb-6"></div>
-            <p class="text-dr-brown text-lg font-light">
-              Clinical response pathways activated automatically by the AI diagnosis.
-              Each class maps to a validated oncology escalation protocol.
-            </p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <!-- Protocol Card: Benign -->
-          <div
-            id="protocol-benign"
-            class="protocol-card group relative bg-white border border-transparent hover:border-blue-400 transition-all duration-500 p-8 reveal delay-100 shadow-md hover:shadow-2xl cursor-default flex flex-col hover:-translate-y-2"
-          >
-            <div class="absolute top-0 left-0 w-full h-1 bg-blue-500 opacity-20 group-hover:opacity-100 transition-opacity"></div>
-            <div class="mb-5">
-              <span class="text-xs font-bold tracking-widest text-blue-700 uppercase mb-2 block">Class 0 · Benign</span>
-              <div class="flex items-center gap-3 mb-2">
-                <span class="w-3 h-3 rounded-full bg-blue-500 flex-shrink-0"></span>
-                <h3 class="font-serif text-2xl text-dr-dark">Routine Surveillance</h3>
-              </div>
-              <p class="text-sm text-dr-brown italic mt-1">Uniform stiffness. No malignant pattern detected.</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-6">
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Schedule follow-up elastography in 12 months.
-              </li>
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Maintain routine clinical monitoring schedule.
-              </li>
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                No biopsy required at this stage.
-              </li>
-            </ul>
-            <div class="pt-4 border-t border-dr-dark/5">
-              <p class="text-[10px] text-dr-brown uppercase tracking-widest font-semibold">Strain Pattern</p>
-              <p class="text-sm text-dr-dark font-medium mt-1">Homogeneous · Low CNR · Smooth boundaries</p>
-            </div>
-          </div>
-
-          <!-- Protocol Card: Precancerous -->
-          <div
-            id="protocol-precancerous"
-            class="protocol-card group relative bg-white border border-transparent hover:border-yellow-400 transition-all duration-500 p-8 reveal delay-200 shadow-md hover:shadow-2xl cursor-default flex flex-col hover:-translate-y-2"
-          >
-            <div class="absolute top-0 left-0 w-full h-1 bg-yellow-400 opacity-20 group-hover:opacity-100 transition-opacity"></div>
-            <div class="mb-5">
-              <span class="text-xs font-bold tracking-widest text-yellow-700 uppercase mb-2 block">Class 1 · Precancerous</span>
-              <div class="flex items-center gap-3 mb-2">
-                <span class="w-3 h-3 rounded-full bg-yellow-400 flex-shrink-0"></span>
-                <h3 class="font-serif text-2xl text-dr-dark">Close Monitoring</h3>
-              </div>
-              <p class="text-sm text-dr-brown italic mt-1">Heterogeneous stiffness. Early-stage dysplasia pattern.</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-6">
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                Confirmatory ultrasound biopsy recommended.
-              </li>
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                Multidisciplinary team review required.
-              </li>
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                Repeat elastography in 3–6 months.
-              </li>
-            </ul>
-            <div class="pt-4 border-t border-dr-dark/5">
-              <p class="text-[10px] text-dr-brown uppercase tracking-widest font-semibold">Strain Pattern</p>
-              <p class="text-sm text-dr-dark font-medium mt-1">Heterogeneous · Moderate CNR · Irregular zones</p>
-            </div>
-          </div>
-
-          <!-- Protocol Card: Malignant -->
-          <div
-            id="protocol-malignant"
-            class="protocol-card group relative bg-white border border-transparent hover:border-dr-accent transition-all duration-500 p-8 reveal delay-300 shadow-md hover:shadow-2xl cursor-default flex flex-col hover:-translate-y-2"
-          >
-            <div class="absolute top-0 left-0 w-full h-1 bg-dr-accent opacity-20 group-hover:opacity-100 transition-opacity"></div>
-            <div class="mb-5">
-              <span class="text-xs font-bold tracking-widest text-dr-accent uppercase mb-2 block">Class 2 · Malignant</span>
-              <div class="flex items-center gap-3 mb-2">
-                <span class="w-3 h-3 rounded-full bg-dr-accent flex-shrink-0"></span>
-                <h3 class="font-serif text-2xl text-dr-dark">Urgent Intervention</h3>
-              </div>
-              <p class="text-sm text-dr-brown italic mt-1">High stiffness contrast. Irregular invasion boundaries.</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-6">
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-dr-accent mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                Immediate oncology referral required.
-              </li>
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-dr-accent mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                Core-needle biopsy without delay.
-              </li>
-              <li class="flex items-start text-sm text-dr-brown">
-                <svg class="w-5 h-5 text-dr-accent mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                Staging MRI/CT imaging recommended.
-              </li>
-            </ul>
-            <div class="pt-4 border-t border-dr-dark/5">
-              <p class="text-[10px] text-dr-brown uppercase tracking-widest font-semibold">Strain Pattern</p>
-              <p class="text-sm text-dr-dark font-medium mt-1">Stiff irregular lesion · High CNR · Invasive margins</p>
-            </div>
-          </div>
-
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
+        <div class="max-w-2xl">
+          <h2 class="font-serif text-4xl md:text-5xl text-dr-dark mb-4">Diagnosis-Based Protocols</h2>
+          <div class="w-16 h-1 bg-dr-accent mb-6"></div>
+          <p class="text-dr-brown text-lg font-light">
+            Clinical response pathways activated automatically by the AI diagnosis.
+            Each class maps to a validated oncology escalation protocol.
+          </p>
         </div>
       </div>
-    </section>
 
-    <!-- ══════════════════════════════════════════
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Protocol Card: Benign -->
+        <div id="protocol-benign"
+          class="protocol-card group relative bg-white border border-transparent hover:border-blue-400 transition-all duration-500 p-8 reveal delay-100 shadow-md hover:shadow-2xl cursor-default flex flex-col hover:-translate-y-2">
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-blue-500 opacity-20 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="mb-5">
+            <span class="text-xs font-bold tracking-widest text-blue-700 uppercase mb-2 block">Class 0 · Benign</span>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-3 h-3 rounded-full bg-blue-500 flex-shrink-0"></span>
+              <h3 class="font-serif text-2xl text-dr-dark">Routine Surveillance</h3>
+            </div>
+            <p class="text-sm text-dr-brown italic mt-1">Uniform stiffness. No malignant pattern detected.</p>
+          </div>
+          <ul class="space-y-3 flex-grow mb-6">
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Schedule follow-up elastography in 12 months.
+            </li>
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Maintain routine clinical monitoring schedule.
+            </li>
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              No biopsy required at this stage.
+            </li>
+          </ul>
+          <div class="pt-4 border-t border-dr-dark/5">
+            <p class="text-[10px] text-dr-brown uppercase tracking-widest font-semibold">Strain Pattern</p>
+            <p class="text-sm text-dr-dark font-medium mt-1">Homogeneous · Low CNR · Smooth boundaries</p>
+          </div>
+        </div>
+
+        <!-- Protocol Card: Precancerous -->
+        <div id="protocol-precancerous"
+          class="protocol-card group relative bg-white border border-transparent hover:border-yellow-400 transition-all duration-500 p-8 reveal delay-200 shadow-md hover:shadow-2xl cursor-default flex flex-col hover:-translate-y-2">
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-yellow-400 opacity-20 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="mb-5">
+            <span class="text-xs font-bold tracking-widest text-yellow-700 uppercase mb-2 block">Class 1 ·
+              Precancerous</span>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-3 h-3 rounded-full bg-yellow-400 flex-shrink-0"></span>
+              <h3 class="font-serif text-2xl text-dr-dark">Close Monitoring</h3>
+            </div>
+            <p class="text-sm text-dr-brown italic mt-1">Heterogeneous stiffness. Early-stage dysplasia pattern.</p>
+          </div>
+          <ul class="space-y-3 flex-grow mb-6">
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Confirmatory ultrasound biopsy recommended.
+            </li>
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Multidisciplinary team review required.
+            </li>
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Repeat elastography in 3–6 months.
+            </li>
+          </ul>
+          <div class="pt-4 border-t border-dr-dark/5">
+            <p class="text-[10px] text-dr-brown uppercase tracking-widest font-semibold">Strain Pattern</p>
+            <p class="text-sm text-dr-dark font-medium mt-1">Heterogeneous · Moderate CNR · Irregular zones</p>
+          </div>
+        </div>
+
+        <!-- Protocol Card: Malignant -->
+        <div id="protocol-malignant"
+          class="protocol-card group relative bg-white border border-transparent hover:border-dr-accent transition-all duration-500 p-8 reveal delay-300 shadow-md hover:shadow-2xl cursor-default flex flex-col hover:-translate-y-2">
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-dr-accent opacity-20 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="mb-5">
+            <span class="text-xs font-bold tracking-widest text-dr-accent uppercase mb-2 block">Class 2 ·
+              Malignant</span>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-3 h-3 rounded-full bg-dr-accent flex-shrink-0"></span>
+              <h3 class="font-serif text-2xl text-dr-dark">Urgent Intervention</h3>
+            </div>
+            <p class="text-sm text-dr-brown italic mt-1">High stiffness contrast. Irregular invasion boundaries.</p>
+          </div>
+          <ul class="space-y-3 flex-grow mb-6">
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-dr-accent mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Immediate oncology referral required.
+            </li>
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-dr-accent mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Core-needle biopsy without delay.
+            </li>
+            <li class="flex items-start text-sm text-dr-brown">
+              <svg class="w-5 h-5 text-dr-accent mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Staging MRI/CT imaging recommended.
+            </li>
+          </ul>
+          <div class="pt-4 border-t border-dr-dark/5">
+            <p class="text-[10px] text-dr-brown uppercase tracking-widest font-semibold">Strain Pattern</p>
+            <p class="text-sm text-dr-dark font-medium mt-1">Stiff irregular lesion · High CNR · Invasive margins</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
          SECTION 4 — PIPELINE METRICS
     ═══════════════════════════════════════════ -->
-    <section id="metrics" class="py-24 bg-dr-dark text-dr-cream relative overflow-hidden">
-      <!-- Background waveform texture -->
-      <div class="absolute inset-0 opacity-5">
-        <svg viewBox="0 0 1200 400" class="w-full h-full" preserveAspectRatio="none">
-          <polyline points="0,200 100,120 200,260 300,140 400,220 500,80 600,200 700,150 800,240 900,110 1000,190 1100,130 1200,200"
-            fill="none" stroke="#8B2635" stroke-width="4"/>
-        </svg>
-      </div>
-      <div class="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-dr-accent/5 to-transparent"></div>
+  <section id="metrics" class="py-24 bg-dr-dark text-dr-cream relative overflow-hidden">
+    <!-- Background waveform texture -->
+    <div class="absolute inset-0 opacity-5">
+      <svg viewBox="0 0 1200 400" class="w-full h-full" preserveAspectRatio="none">
+        <polyline
+          points="0,200 100,120 200,260 300,140 400,220 500,80 600,200 700,150 800,240 900,110 1000,190 1100,130 1200,200"
+          fill="none" stroke="#8B2635" stroke-width="4" />
+      </svg>
+    </div>
+    <div class="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-dr-accent/5 to-transparent"></div>
 
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="text-center mb-16 reveal">
-          <h2 class="font-serif text-4xl md:text-5xl text-dr-cream mb-4">Pipeline Performance</h2>
-          <div class="w-16 h-1 bg-dr-gold mx-auto mb-6"></div>
-          <p class="text-dr-cream/60 max-w-xl mx-auto text-lg font-light">
-            Validated on hold-out phantom data from Concordia's IMPACT Lab using Wilcoxon
-            signed-rank testing with 95% confidence intervals.
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-serif text-4xl md:text-5xl text-dr-cream mb-4">Pipeline Performance</h2>
+        <div class="w-16 h-1 bg-dr-gold mx-auto mb-6"></div>
+        <p class="text-dr-cream/60 max-w-xl mx-auto text-lg font-light">
+          Trained on simulated data, Validated on hold-out phantom data from Concordia's IMPACT Lab using Wilcoxon
+          signed-rank testing with 95% confidence intervals.
+        </p>
+      </div>
+
+      <!-- Metrics Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal">
+        <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
+          <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">95<span
+              class="text-2xl">%</span></p>
+          <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Validation<br />Accuracy</p>
+        </div>
+        <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
+          <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">0.13</p>
+          <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Mean<br />CNR</p>
+        </div>
+        <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
+          <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">3-Class</p>
+          <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Output<br />Classification
           </p>
         </div>
-
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal">
-          <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
-            <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">99.9<span class="text-2xl">%</span></p>
-            <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">DMD Energy<br/>Threshold</p>
-          </div>
-          <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
-            <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">0.85</p>
-            <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Eigenvalue<br/>Damping Threshold</p>
-          </div>
-          <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
-            <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">3-Class</p>
-            <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Output<br/>Classification</p>
-          </div>
-          <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
-            <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">p&lt;0.05</p>
-            <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Wilcoxon<br/>Significance</p>
-          </div>
-        </div>
-
-        <!-- Architecture breakdown -->
-        <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 reveal">
-          <div class="border border-dr-cream/10 p-8">
-            <h3 class="font-serif text-2xl text-dr-cream mb-6">Signal Processing Stack</h3>
-            <div class="space-y-4">
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-accent text-xs w-8 text-right">01</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">2D-DFT Bandpass Filter <span class="text-dr-cream/30 text-xs">(0.05–0.45 Nyquist)</span></span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-accent text-xs w-8 text-right">02</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">Hankel Matrix Embedding <span class="text-dr-cream/30 text-xs">(time-delay, m=F//2)</span></span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-accent text-xs w-8 text-right">03</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">Exact DMD Decomposition <span class="text-dr-cream/30 text-xs">(SVD + eigendecomp)</span></span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-accent text-xs w-8 text-right">04</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">Rayleigh Noise Augmentation <span class="text-dr-cream/30 text-xs">(sim-to-real)</span></span>
-              </div>
-            </div>
-          </div>
-          <div class="border border-dr-cream/10 p-8">
-            <h3 class="font-serif text-2xl text-dr-cream mb-6">Deep Learning Architecture</h3>
-            <div class="space-y-4">
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-gold text-xs w-8 text-right">CNN</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">U-Net Encoder <span class="text-dr-cream/30 text-xs">(1→16→32→64→128 ch)</span></span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-gold text-xs w-8 text-right">RNN</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">Bidirectional LSTM <span class="text-dr-cream/30 text-xs">(hidden=256, 8 frames)</span></span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-gold text-xs w-8 text-right">OPT</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">ADMM + Proximal SGD <span class="text-dr-cream/30 text-xs">(TV regularisation)</span></span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-dr-gold text-xs w-8 text-right">OUT</span>
-                <div class="flex-1 h-px bg-dr-cream/10"></div>
-                <span class="text-sm text-dr-cream/70">Focal Loss + Softmax <span class="text-dr-cream/30 text-xs">(3-class probabilities)</span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom dataset attribution -->
-        <div class="mt-12 text-center reveal">
-          <p class="text-dr-cream/30 text-xs uppercase tracking-widest font-semibold">
-            Dataset: Concordia University IMPACT Lab ·
-            <a href="https://users.encs.concordia.ca/~impact/" class="hover:text-dr-gold transition-colors underline underline-offset-2" target="_blank" rel="noopener">
-              users.encs.concordia.ca/~impact/
-            </a>
+        <div class="text-center p-8 border border-dr-cream/10 hover:border-dr-accent/50 transition-colors group">
+          <p class="font-serif text-5xl text-dr-cream group-hover:text-dr-gold transition-colors">p&lt;0.001</p>
+          <p class="text-xs text-dr-cream/50 uppercase tracking-widest font-semibold mt-3">Wilcoxon<br />Significance
           </p>
         </div>
       </div>
-    </section>
 
-    <!-- ══════════════════════════════════════════
+      <!-- Architecture breakdown -->
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 reveal">
+        <div class="border border-dr-cream/10 p-8">
+          <h3 class="font-serif text-2xl text-dr-cream mb-6">Signal Processing Stack</h3>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-accent text-xs w-8 text-right">01</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">2D-DFT Bandpass Filter <span
+                  class="text-dr-cream/30 text-xs">(0.05–0.45 Nyquist)</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-accent text-xs w-8 text-right">02</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">Hankel Matrix Embedding <span
+                  class="text-dr-cream/30 text-xs">(time-delay, m=F//2)</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-accent text-xs w-8 text-right">03</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">Exact DMD Decomposition <span class="text-dr-cream/30 text-xs">(SVD
+                  + eigendecomp)</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-accent text-xs w-8 text-right">04</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">Rayleigh Noise Augmentation <span
+                  class="text-dr-cream/30 text-xs">(sim-to-real)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="border border-dr-cream/10 p-8">
+          <h3 class="font-serif text-2xl text-dr-cream mb-6">Deep Learning Architecture</h3>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-gold text-xs w-8 text-right">CNN</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">U-Net Encoder <span
+                  class="text-dr-cream/30 text-xs">(1→16→32→64→128 ch)</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-gold text-xs w-8 text-right">RNN</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">Bidirectional LSTM <span
+                  class="text-dr-cream/30 text-xs">(hidden=256, 8 frames)</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-gold text-xs w-8 text-right">OPT</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">ADMM + Proximal SGD <span class="text-dr-cream/30 text-xs">(TV
+                  regularisation)</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-dr-gold text-xs w-8 text-right">OUT</span>
+              <div class="flex-1 h-px bg-dr-cream/10"></div>
+              <span class="text-sm text-dr-cream/70">Focal Loss + Softmax <span
+                  class="text-dr-cream/30 text-xs">(3-class probabilities)</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom dataset attribution -->
+      <div class="mt-12 text-center reveal">
+        <p class="text-dr-cream/70 text-sm uppercase tracking-[0.2em] font-semibold">
+          Dataset: <span class="text-dr-gold">Concordia University IMPACT Lab</span>
+          <br>
+          <a href="https://users.encs.concordia.ca/~impact/ultrasound-elastography-simulation-database/"
+            class="hover:text-dr-gold transition-colors underline underline-offset-4 decoration-dr-gold/50"
+            target="_blank" rel="noopener">
+            SIMULATION DATA
+          </a>
+          ~
+          <a href="https://users.encs.concordia.ca/~impact/ultrasound-elastography-dataset-for-unsupervised-training/"
+            class="hover:text-dr-gold transition-colors underline underline-offset-4 decoration-dr-gold/50"
+            target="_blank" rel="noopener">
+            PHANTOM DATA
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
          FOOTER
     ═══════════════════════════════════════════ -->
-    <footer class="py-10 bg-dr-cream border-t border-dr-dark/5">
-      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="font-serif text-xl text-dr-dark font-bold tracking-tight">
-          Elasto<span class="text-dr-accent">Grade.</span>
-        </p>
-        <p class="text-xs text-dr-brown text-center">
-          Ultrasound Elastography · Label-Free Tumor Grading · Concordia University ENCS<br/>
-          <span class="opacity-50">For research and academic demonstration purposes only. Not for clinical diagnosis.</span>
-        </p>
-        <p class="text-xs text-dr-brown/40 uppercase tracking-widest font-semibold">
-          CNN-LSTM · DMD · ADMM
-        </p>
-      </div>
-    </footer>
+  <footer class="py-10 bg-dr-cream border-t border-dr-dark/5">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
 
-    <!-- ══════════════════════════════════════════
+      <!-- Project Name -->
+      <p class="font-serif text-xl text-dr-dark font-bold tracking-tight">
+        Elasto<span class="text-dr-accent">Grade.</span>
+      </p>
+
+      <!-- Team Members -->
+      <div class="text-center md:text-right text-dr-dark text-sm leading-relaxed">
+        <p class="font-semibold">Team Members</p>
+        <ul class="mt-2 space-y-1">
+          <li>V. Pujya Ganesh <span class="text-dr-accent">(DL.AI.U4AID24141)</span></li>
+          <li>P. Bhargav Ram <span class="text-dr-accent">(DL.AI.U4AID24146)</span></li>
+          <li>Vishnu Karthik C <span class="text-dr-accent">(DL.AI.U4AID24109)</span></li>
+          <li>Amith Vignesh K <span class="text-dr-accent">(DL.AI.U4AID24116)</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════
          APP.JS — Wired externally
     ═══════════════════════════════════════════ -->
-    <script src="js/app.js"></script>
+  <script src="js/app.js"></script>
 
-    <!-- Heatmap download button visibility toggle -->
-    <script>
-      // Show the download button once the heatmap loads
-      const _heatmapImg = document.getElementById('strain-heatmap');
-      const _dlBtn = document.getElementById('heatmap-download-btn');
-      if (_heatmapImg && _dlBtn) {
-        _heatmapImg.addEventListener('load', () => {
-          if (_heatmapImg.src && _heatmapImg.src !== window.location.href) {
-            _dlBtn.classList.remove('hidden');
-          }
-        });
-      }
-    </script>
+  <!-- Heatmap download button visibility toggle -->
+  <script>
+    // Show the download button once the heatmap loads
+    const _heatmapImg = document.getElementById('strain-heatmap');
+    const _dlBtn = document.getElementById('heatmap-download-btn');
+    if (_heatmapImg && _dlBtn) {
+      _heatmapImg.addEventListener('load', () => {
+        if (_heatmapImg.src && _heatmapImg.src !== window.location.href) {
+          _dlBtn.classList.remove('hidden');
+        }
+      });
+    }
+  </script>
 
-  </body>
+</body>
+
 </html>

@@ -14,7 +14,7 @@ pillow>=10.0.0
 
 # ── Deep Learning — PyTorch (CPU build; swap for CUDA wheel on GPU servers) ───
 # For CUDA 11.8 GPU build, replace the three lines above with:
---index-url https://download.pytorch.org/whl/cu118
+--extra-index-url https://download.pytorch.org/whl/cu118
 torch>=2.1.0+cu118
 torchvision>=0.16.0+cu118
 

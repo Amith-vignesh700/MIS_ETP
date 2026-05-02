@@ -368,7 +368,6 @@ class CNNLSTMElastography(nn.Module):
             nn.Dropout(dropout),
             nn.Linear(128, 64),
             nn.GELU(),
-            nn.Dropout(dropout / 2),
             nn.Linear(64, n_classes),
         )
 
@@ -377,9 +376,7 @@ class CNNLSTMElastography(nn.Module):
         n_pools       = len(cnn_channels) - 2
         reduced       = max(patch_size // (2 ** n_pools), 4)
         self.disp_head = nn.Sequential(
-            nn.Linear(lstm_out_dim, 256),
-            nn.GELU(),
-            nn.Linear(256, reduced * reduced),
+            nn.Linear(lstm_out_dim, reduced * reduced),
         )
         self.disp_upsample = nn.Upsample(
             size=(patch_size, patch_size), mode="bilinear", align_corners=False
