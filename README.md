@@ -1,4 +1,4 @@
-# 🔬 Ultrasound Elastography for Label-Free Tissue Tumor Gradingg
+# 🔬 Ultrasound Elastography for Label-Free Tissue Tumor Grading
 
 > **A physics-informed deep learning pipeline for autonomous, label-free tumor grading using ultrasound elastography — integrating Dynamic Mode Decomposition, CNN-LSTM hybrid networks, ADMM optimization, and statistical validation into a containerized clinical web application.**
 
